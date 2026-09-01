@@ -117,3 +117,25 @@ las búsquedas masivas pueden congelar el sistema. para no saturar la base de da
 Atributo 2: Fiabilidad
 para no perder datos si fallan las aerolíneas. se guardo eventos en espera si cae el internet, aislo los fallos externos para no trabar el sistema.
     
+
+
+
+1: Que clase junta negocio + guardado + pantalla
+R: encomienda (esta calse mescla consultar estado, pantalla rastreo  y guardar en la base de datos  )
+ 
+
+2: División en cajas de una sola responsabilidad
+Caja 1: encomienda (negocio)
+guardar solo los datos puros del paquete (codigoseguimiento, peso, estado)
+Caja 2: encomiendarepository (guardado)
+guardar, actualizar y consultar los paquetes en la base de datos
+Caja 3: rastreopantalla (pantalla)
+mostrar la información del rastreo en la pantalla del cliente o del operador
+
+3. Test de departamentos ¿Quién pediría cambios?
+Caja encomienda (negocio): Departamento de operaciones y logística 
+Caja encomiendarepository (guardado): Departamento de sistemas
+Caja rastreopantalla (antalla): Departamento de Diseño o sistemas 
+
+
+
