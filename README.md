@@ -110,6 +110,8 @@ classDiagram
     Encomienda "1" --> "0..1" Entrega : finaliza en
     Encomienda "1" --> "0..*" Incidencia : presenta
 
+<img width="1247" height="1097" alt="Captura de pantalla 2026-08-31 210113" src="https://github.com/user-attachments/assets/e37f2655-585a-4b35-87ff-75d9775629dd" />
+
 
 Atributo 1: Eficiencia (performance)
 las búsquedas masivas pueden congelar el sistema. para no saturar la base de datos, separo consultas de registros, y sumo servidores automáticamente por si hay mucho tráfico.
@@ -139,3 +141,147 @@ Caja rastreopantalla (antalla): Departamento de Diseño o sistemas
 
 
 
+H2
+
+classDiagram
+
+    class Cliente {
+        +int idCliente
+        +string nombre
+        +string telefono
+        +string direccion
+        +RegistrarEncomienda()
+        +ConsultarEstado()
+    }
+
+    class OperadorLogistico {
+        +int idOperador
+        +string nombre
+        +RegistrarEncomienda()
+        +RegistrarMovimiento()
+        +ActualizarEstado()
+    }
+
+    class Supervisor {
+        +int idSupervisor
+        +string nombre
+        +SupervisarEnvios()
+        +RevisarIncidencias()
+        +ResolverIncidencia()
+    }
+
+    class Administrador {
+        +int idAdministrador
+        +string nombre
+        +GestionarUsuarios()
+        +GestionarPermisos()
+        +ConfigurarSistema()
+    }
+
+
+    class IEncomiendaRepository {
+        <<interface>>
+        +Guardar(encomienda: Encomienda)
+        +Actualizar(encomienda: Encomienda)
+        +ObtenerPorCodigo(codigo: string) Encomienda
+    }
+
+    class INotificador {
+        <<interface>>
+        +EnviarNotificacion(mensaje: string)
+    }
+
+    class ITransporte {
+        <<interface>>
+        +Transportar(encomienda: Encomienda)
+    }
+
+    class IRastreo {
+        <<interface>>
+        +MostrarEstado(encomienda: Encomienda)
+    }
+
+
+    class Encomienda {
+        +string codigoSeguimiento
+        +decimal peso
+        +string origen
+        +string destino
+        +string estado
+        +DateTime fechaEstimadaLlegada
+        +CambiarEstado(nuevoEstado: string)
+        +ConsultarEstado()
+    }
+
+
+    class GestorEncomienda {
+        +Registrar(encomienda: Encomienda)
+        +ActualizarEstado(codigo: string)
+        +Consultar(codigo: string)
+    }
+
+
+    
+    class EncomiendaRepositoryBD {
+        +Guardar(encomienda: Encomienda)
+        +Actualizar(encomienda: Encomienda)
+        +ObtenerPorCodigo(codigo: string) Encomienda
+    }
+
+
+    class RastreoPantalla {
+        +MostrarEstado(encomienda: Encomienda)
+    }
+
+ 
+    class NotificadorCliente {
+        +EnviarNotificacion(mensaje: string)
+    }
+
+
+
+    class TransporteAereo {
+        +Transportar(encomienda: Encomienda)
+    }
+
+    class TransporteTerrestre {
+        +Transportar(encomienda: Encomienda)
+    }
+
+
+
+    IEncomiendaRepository <|.. EncomiendaRepositoryBD : implementa
+
+    INotificador <|.. NotificadorCliente : implementa
+
+    ITransporte <|.. TransporteAereo : implementa
+    ITransporte <|.. TransporteTerrestre : implementa
+
+    IRastreo <|.. RastreoPantalla : implementa
+
+
+    Cliente "1" --> "0..*" Encomienda : registra / consulta
+
+    OperadorLogistico "1" --> "0..*" Encomienda : registra
+
+    Supervisor "1" --> "0..*" Encomienda : supervisa
+
+    Administrador "1" --> "0..*" OperadorLogistico : gestiona
+    Administrador "1" --> "0..*" Supervisor : gestiona
+
+
+    GestorEncomienda --> Encomienda : gestiona
+
+    GestorEncomienda --> IEncomiendaRepository : usa contrato
+
+    GestorEncomienda --> INotificador : usa contrato
+
+    GestorEncomienda --> ITransporte : usa contrato
+
+    RastreoPantalla --> Encomienda : visualiza
+
+
+<img width="1754" height="916" alt="Captura de pantalla 2026-09-06 224054" src="https://github.com/user-attachments/assets/2381644b-5d44-4e2a-ba85-9a617c8817d7" />
+
+
+Revisé mi diagrama del H1 y separé las responsabilidades que estaban concentradas en la clase encomienda  se quedo la clase  encomienda únicamente para manejar los datos y reglas propias de la encomienda y se creo EncomiendaRepositoryBD para encargarse exclusivamente del guardado y consulta de datos. Luego seagrego IEncomiendaRepository para que el sistema dependa de una interfaz y no directamente de la base de datos. También separé el rastreo mediante IRastreo y RastreoPantalla, y las notificaciones mediante INotificador y NotificadorCliente. Eliminé el switch que diferenciaba los tipos de transporte y lo reemplacé por ITransporte, TransporteAereo y TransporteTerrestre, aplicando OCP. Dividí las interfaces en contratos pequeños y específicos para aplicar ISP. Finalmente, agregué los actores Cliente, OperadorLogistico, Supervisor y Administrador para representar claramente sus funciones. Con estos cambios reduje el acoplamiento y logré una arquitectura más organizada, mantenible y fácil de ampliar.<img width="1247" 
