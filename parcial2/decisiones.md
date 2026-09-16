@@ -1,5 +1,5 @@
 
- P2.1 — Elección y Justificación de Patrones
+ P2.1 :Elección y Justificación de Patrones
 
 Situación 1: Vencimiento de Membresías
 Patrón aplicado: Observer (Observador).
@@ -23,3 +23,14 @@ Justificación:*Convierte la interfaz incompatible del SDK
 externo a los métodos requeridos por nuestro dominio
 Si no se aplica, el sistema de cobros se acopla a detalles de terceros 
 (centavos, tokens, inglés), impidiendo cambiar de proveedor el próximo año sin reescribir la lógica de la aplicación
+
+
+
+
+
+P2.3 :La Conexión SOLID
+
+La solución en `solucion.py` aplica el **Principio de Abierto/Cerrado (Open/Closed Principle - OCP). 
+
+Se evidencia en la clase `CalculadorTarifaContext`, la cual queda cerrada a modificaciones (no requiere alterar código ni usar `if/else` al cambiar de 
+temporada) y abierta a extensiones mediante el método `establecer_estrategia()`, permitiendo agregar nuevas tarifas heredando de `ITarifaStrategy` en la línea del método `obtener_cobro`.
