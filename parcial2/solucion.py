@@ -1,10 +1,10 @@
 # Solucion: <MARCO ANTONIO CHECA MAMANI>
-# Situacion 2: Calculo de tarifas usando el patron Strategy.
+# Situacion 2: Calculo de tarifas usando el patron 
 
 from abc import ABC, abstractmethod
 
 
-# Contrato comun para los calculos de tarifa
+# Contrato comun calculos de tarifa
 class ITarifaStrategy(ABC):
     @abstractmethod
     def calcular_monto_total(
@@ -13,7 +13,7 @@ class ITarifaStrategy(ABC):
         pass
 
 
-# Tarifa de la Manana: Tarifa normal completa
+# Tarifa de la manana Tarifa normal completa
 class TarifaMananaStrategy(ITarifaStrategy):
     def calcular_monto_total(
         self, tarifa_base: float, horas: float
@@ -21,7 +21,7 @@ class TarifaMananaStrategy(ITarifaStrategy):
         return tarifa_base * horas
 
 
-# Tarifa de la Noche: Recargo del 20%
+# Tarifa de la Noche recargo del 20%
 class TarifaNocheStrategy(ITarifaStrategy):
     def calcular_monto_total(
         self, tarifa_base: float, horas: float
@@ -29,7 +29,7 @@ class TarifaNocheStrategy(ITarifaStrategy):
         return (tarifa_base * horas) * 1.20
 
 
-# Tarifa de Fin de Semana: 30% descuento y maximo 3 horas
+# Tarifa de Fin de Semana 30% descuento y maximo 3 horas
 class TarifaFinDeSemanaStrategy(ITarifaStrategy):
     def calcular_monto_total(
         self, tarifa_base: float, horas: float
@@ -53,7 +53,7 @@ class CalculadorTarifaContext:
 
 # Ejemplo de uso en el Gimnasio Fuerza Andina
 if __name__ == "__main__":
-    tarifa_base_hora = 20.0  # Bs. 20 la h
+    tarifa_base_hora = 20.0  # Bs. 20 h
 
     # Usar tarifa de la manana por defecto
     calculador = CalculadorTarifaContext(TarifaMananaStrategy())
