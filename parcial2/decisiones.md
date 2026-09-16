@@ -1,36 +1,35 @@
+P2.1 - Eleccion y Justificacion de Patrones
+Situacion 1: Vencimiento de Membresias
 
- P2.1 :Elección y Justificación de Patrones
+Patron aplicado: Observer
+Justificacion: Permite que el modulo de socios mande la senal de vencimiento 
+sin saber quien la recibe si no se aplica hay que modificar el codigo de socios 
+cada vez que pidan agregar otro aviso como WhatsApp o Promociones lo que rompe los
+principios de responsabilidad unica y abierto cerrado
 
-Situación 1: Vencimiento de Membresías
-Patrón aplicado: Observer (Observador).
 
-Justificacion: Permite desacoplar el módulo de socios (Sujeto) de los
-  destinatarios de los avisos (WhatsApp, Registro, Recepción, Promociones).
- Si no se aplica, se viola el principio Open/Closed y Single Responsibility,
-  ya que cada nuevo módulo interesado obliga a modificar y re-probar el código central de socios,
-  generando alta rigidez y acoplamiento
+Situacion 2: Calculo Dinamico de Tarifas
 
-Situación 2: Cálculo Dinámico de Tarifas
-Patrón aplicado: Strategy (Estrategia).
-Justificación: Encapsula cada algoritmo de cálculo de tarifa 
-(Mañana, Noche, Fin de Semana) en clases independientes bajo un contrato común.
-Si no se aplica, la duplicación del bloque `if/else` en cobros y cotizaciones genera 
-inconsistencias cuando el dueño cambia las reglas de temporada y exige modificar código condicional complejo
+Patron aplicado: Strategy
+Justificacion: Separa cada regla de cobro en su propia clase para que la logica no 
+viva metida en un if/else si no se aplica hay que copiar el mismo bloque de codigo 
+en cobros y cotizaciones y cuando el dueno cambie precios por temporada habra que 
+modificar ambos lugares arriesgando errores
 
- Situación 3: Pasarela de Pagos Externa
-Patrón aplicado:Adapter (Adaptador)
-Justificación:*Convierte la interfaz incompatible del SDK
-externo a los métodos requeridos por nuestro dominio
-Si no se aplica, el sistema de cobros se acopla a detalles de terceros 
-(centavos, tokens, inglés), impidiendo cambiar de proveedor el próximo año sin reescribir la lógica de la aplicación
 
+Situacion 3: Pasarela de Pagos Externa
+
+Patron aplicado: Adapter
+Justificacion: Funciona como un traductor entre el SDK externo en ingles con montos
+en centavos y el codigo de nuestro gimnasio si no se aplica el dominio queda acoplado 
+a la libreria del proveedor actual y cambiarlo el proximo ano exigiria rehacer todo
+el sistema de cobros
 
 
 
 
 P2.3 :La Conexión SOLID
 
-La solución en `solucion.py` aplica el **Principio de Abierto/Cerrado (Open/Closed Principle - OCP). 
+La solucion en solucion.py aplica el Principio de Abierto/Cerrado (Open/Closed Principle - OCP)
 
-Se evidencia en la clase `CalculadorTarifaContext`, la cual queda cerrada a modificaciones (no requiere alterar código ni usar `if/else` al cambiar de 
-temporada) y abierta a extensiones mediante el método `establecer_estrategia()`, permitiendo agregar nuevas tarifas heredando de `ITarifaStrategy` en la línea del método `obtener_cobro`.
+Se nota en CalculadorTarifaContext. La clase queda intacta sin tener que tocar el codigo ni meter mas if/else cada vez que el dueno cambie las reglas por temporada (cerrada a modificacion). Si manana inventan una tarifa nueva solo creas otra clase con ITarifaStrategy y se la pasas directo con establecer_estrategia() (abierta a extension)
